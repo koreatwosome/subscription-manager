@@ -9,14 +9,26 @@ import { toast } from "sonner"
 
 export function SignUpForm() {
   const [loading, setLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
     const result = await signUp(formData)
     if (result?.error) {
       toast.error(result.error)
+    } else if (result?.pending) {
+      setEmailSent(true)
     }
     setLoading(false)
+  }
+
+  if (emailSent) {
+    return (
+      <div className="text-center space-y-2 py-4">
+        <p className="font-medium">이메일을 확인해주세요</p>
+        <p className="text-sm text-gray-500">가입 확인 링크를 이메일로 보냈습니다.</p>
+      </div>
+    )
   }
 
   return (
